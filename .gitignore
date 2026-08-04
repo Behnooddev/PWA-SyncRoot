@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.npm/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Prisma
+apps/server/prisma/migrations/dev.db*
+
+# Uploaded files (local storage provider)
+apps/server/storage/uploads/**
+!apps/server/storage/uploads/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+.idea/
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+
+# Vite
+apps/client/dist/
+apps/client/.vite/
+
+# PWA generated
+apps/client/dev-dist/

@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap");
+@import "tailwindcss";
+
+/*
+ * Design tokens for SyncRoot.
+ *
+ * Palette reasoning: the brief calls for dark + purple + glassmorphism.
+ * Rather than Tailwind's default purple-600/violet-500 (which is what
+ * every AI-generated dark dashboard reaches for), the accent here is a
+ * deeper indigo-violet (#6E5AF0) with a lighter lavender glow variant for
+ * hover/focus states — closer to what Linear actually uses than the
+ * generic "purple gradient SaaS" look.
+ *
+ * Type reasoning: this is a dense, functional workspace, not a marketing
+ * page, so legibility at UI sizes matters more than personality. Inter
+ * carries all body/UI text. Bricolage Grotesque (a characterful geometric
+ * display face) is reserved for page titles and empty-state headlines —
+ * used sparingly, not on every label. JetBrains Mono handles anything
+ * data-like: timestamps, file sizes, activity metadata.
+ */
+@theme {
+  --font-display: "Bricolage Grotesque", "Inter", sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Backgrounds — cool near-black, layered for depth rather than flat. */
+  --color-bg-base: #09090f;
+  --color-bg-surface: #121218;
+  --color-bg-elevated: #17171f;
+
+  /* Accent — indigo-violet, not Tailwind-default purple. */
+  --color-accent: #6e5af0;
+  --color-accent-hover: #7d6bf5;
+  --color-accent-glow: #b79cff;
+  --color-accent-muted: #372f66;
+
+  /* Text */
+  --color-text-primary: #f5f4fa;
+  --color-text-secondary: #a2a0b3;
+  --color-text-tertiary: #6b6880;
+
+  /* Semantic */
+  --color-success: #34d399;
+  --color-danger: #f87171;
+  --color-warning: #fbbf24;
+
+  /* Borders */
+  --color-border-subtle: rgb(255 255 255 / 8%);
+  --color-border-strong: rgb(255 255 255 / 14%);
+
+  --radius-card: 1rem;
+  --radius-control: 0.625rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border-subtle);
+  }
+
+  body {
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+
+  /* Respect reduced-motion preferences — every Framer Motion animation
+     should check this too, but this covers native CSS transitions. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Reusable glass surface — the one signature visual element used across
+     cards, modals, and the sidebar, rather than repeated ad-hoc utility
+     stacks in every component. */
+  .glass-surface {
+    background-color: rgb(255 255 255 / 4%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-border-subtle);
+  }
+}

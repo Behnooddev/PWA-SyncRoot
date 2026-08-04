@@ -1,0 +1,34 @@
+{
+  "name": "syncroot",
+  "private": true,
+  "version": "0.1.0",
+  "description": "SyncRoot — A Modern Collaborative Workspace",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/server & npm run dev --workspace=apps/client",
+    "dev:client": "npm run dev --workspace=apps/client",
+    "dev:server": "npm run dev --workspace=apps/server",
+    "build": "npm run build --workspace=packages/shared-types && npm run build --workspace=apps/server && npm run build --workspace=apps/client",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write \"apps/**/src/**/*.{ts,tsx,css}\" \"packages/**/src/**/*.ts\"",
+    "format:check": "prettier --check \"apps/**/src/**/*.{ts,tsx,css}\" \"packages/**/src/**/*.ts\"",
+    "test": "npm run test --workspaces --if-present",
+    "db:migrate": "npm run db:migrate --workspace=apps/server",
+    "db:seed": "npm run db:seed --workspace=apps/server",
+    "db:studio": "npm run db:studio --workspace=apps/server",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

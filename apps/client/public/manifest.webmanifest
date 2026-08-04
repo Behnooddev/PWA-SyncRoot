@@ -1,0 +1,17 @@
+{
+  "name": "SyncRoot — A Modern Collaborative Workspace",
+  "short_name": "SyncRoot",
+  "description": "Create projects, manage tasks and todos, comment, and share files with your team.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090F",
+  "theme_color": "#09090F",
+  "icons": [
+    {
+      "src": "/icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

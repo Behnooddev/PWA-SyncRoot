@@ -1,0 +1,14 @@
+// SyncRoot — Prisma Schema
+//
+// Phase 1 intentionally defines only the datasource and generator.
+// Models (Project, Task, Todo, Comment, File, Activity, User) are designed
+// and added in Phase 2, per the database strategy in PHASE_0_PLANNING.md.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
