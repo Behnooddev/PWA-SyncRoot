@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
-// The rules above are disabled for this file only, and only temporarily:
-// with zero models defined in schema.prisma (Phase 1), Prisma's generated
-// client literally types `PrismaClient` as `any` (see
-// node_modules/.prisma/client/default.d.ts). Once Phase 2 adds real
-// models and we re-run `prisma generate`, PrismaClient becomes properly
-// typed and these disables should be removed — flagging this explicitly
-// rather than leaving an unexplained disable comment.
+// The rules above are disabled for this file only, and only temporarily —
+// and only in THIS development sandbox. schema.prisma now has real models
+// (Phase 2), so a normal `prisma generate` with full internet access
+// produces a properly-typed PrismaClient and these disables become
+// unnecessary. They're only here because this sandbox's network blocks
+// binaries.prisma.sh, so `prisma generate` can't finish and falls back to
+// `PrismaClient: any` (see node_modules/.prisma/client/default.d.ts).
+// ACTION FOR NEXT ENVIRONMENT WITH FULL NETWORK ACCESS: run
+// `npm run db:generate` (workspace apps/server), confirm PrismaClient is
+// properly typed, then delete this disable comment and the one in
+// server.ts's shutdown handler.
 import { PrismaClient } from "@prisma/client";
 import { env } from "@/config/env.js";
 

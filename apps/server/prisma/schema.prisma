@@ -1,8 +1,8 @@
 // SyncRoot — Prisma Schema
 //
-// Phase 1 intentionally defines only the datasource and generator.
-// Models (Project, Task, Todo, Comment, File, Activity, User) are designed
-// and added in Phase 2, per the database strategy in PHASE_0_PLANNING.md.
+// Phase 2: full data model. See PHASE_0_PLANNING.md §4 for the relational
+// design decisions (nullable-FK pattern over polymorphic entityType/Id,
+// soft- vs hard-delete choices, append-only Activity).
 
 generator client {
   provider = "prisma-client-js"
@@ -12,3 +12,253 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// User — lightweight, no auth in V1. Created the first time a name is seen
+// in the X-User-Name header. See PHASE_0_PLANNING.md §1.
+// ─────────────────────────────────────────────────────────────────────────
+model User {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  createdProjects  Project[] @relation("ProjectCreatedBy")
+  createdTasks     Task[]    @relation("TaskCreatedBy")
+  createdTodos     Todo[]    @relation("TodoCreatedBy")
+  comments         Comment[] @relation("CommentAuthor")
+  uploadedFiles    FileAsset[] @relation("FileUploadedBy")
+  activities       Activity[] @relation("ActivityActor")
+
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Project — the top-level container. Soft-deleted (deletedAt) so activity
+// history stays meaningful after deletion, per the DB strategy decision.
+// ─────────────────────────────────────────────────────────────────────────
+model Project {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  /// Hex color used for the project card accent in the UI — lets a board
+  /// full of projects stay visually distinguishable without user-uploaded icons.
+  color       String    @default("#6E5AF0")
+
+  createdById String
+  createdBy   User      @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  tasks      Task[]
+  todos      Todo[]
+  comments   Comment[]
+  files      FileAsset[]
+  activities Activity[]
+
+  @@index([deletedAt])
+  @@index([createdById])
+  @@map("projects")
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Task — belongs to exactly one Project. Soft-deleted for the same reason
+// as Project. Status/priority enums keep the board queryable and indexed
+// instead of relying on free-text.
+// ─────────────────────────────────────────────────────────────────────────
+model Task {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus   @default(TODO)
+  priority    TaskPriority @default(MEDIUM)
+  dueDate     DateTime?
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdById String
+  createdBy   User   @relation("TaskCreatedBy", fields: [createdById], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  todos      Todo[]
+  comments   Comment[]
+  files      FileAsset[]
+  activities Activity[]
+
+  @@index([projectId, status])
+  @@index([projectId, deletedAt])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Todo — belongs to a Project always, and OPTIONALLY to a Task (a
+// task-scoped checklist item) or stands alone as a project-level todo.
+// Hard-deleted: low stakes, no need to preserve history the way tasks and
+// projects do.
+// ─────────────────────────────────────────────────────────────────────────
+model Todo {
+  id       String  @id @default(cuid())
+  title    String
+  isDone   Boolean @default(false)
+  /// Manual sort order within its list (project-level or task-level).
+  position Int     @default(0)
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  taskId String?
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  createdById String
+  createdBy   User   @relation("TodoCreatedBy", fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comments   Comment[]
+  activities Activity[]
+
+  @@index([projectId, isDone])
+  @@index([taskId])
+  @@map("todos")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Comment — attaches to exactly ONE of Project, Task, or Todo (enforced by
+// a CHECK constraint added in the migration SQL — Prisma's schema language
+// can't express "exactly one of N nullable columns is set"). Chosen over a
+// generic entityType/entityId polymorphic column so each relation stays
+// typed and Prisma can eager-load it safely.
+// ─────────────────────────────────────────────────────────────────────────
+model Comment {
+  id      String @id @default(cuid())
+  content String
+
+  authorId String
+  author   User   @relation("CommentAuthor", fields: [authorId], references: [id])
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  taskId String?
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  todoId String?
+  todo   Todo?   @relation(fields: [todoId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  activities Activity[]
+
+  @@index([projectId])
+  @@index([taskId])
+  @@index([todoId])
+  @@map("comments")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// FileAsset — metadata row for an uploaded file. `storageKey` is the
+// opaque key returned by StorageProvider.save() (see lib/storage/) — never
+// a raw filesystem path, so swapping to S3/MinIO later only changes what
+// storageKey means, not this table.
+// ─────────────────────────────────────────────────────────────────────────
+model FileAsset {
+  id           String @id @default(cuid())
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  storageKey   String @unique
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  taskId String?
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  uploadedById String
+  uploadedBy   User   @relation("FileUploadedBy", fields: [uploadedById], references: [id])
+
+  createdAt DateTime @default(now())
+
+  activities Activity[]
+
+  @@index([projectId])
+  @@index([taskId])
+  @@map("files")
+}
+
+enum ActivityType {
+  PROJECT_CREATED
+  PROJECT_UPDATED
+  PROJECT_DELETED
+  TASK_CREATED
+  TASK_UPDATED
+  TASK_DELETED
+  TODO_CREATED
+  TODO_COMPLETED
+  TODO_REOPENED
+  TODO_DELETED
+  COMMENT_CREATED
+  COMMENT_DELETED
+  FILE_UPLOADED
+  FILE_DELETED
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Activity — append-only audit/feed log. Never updated or deleted by user
+// action; only ever inserted by services. `metadata` snapshots
+// human-readable info (e.g. a task's title at delete time) so the feed
+// stays meaningful even after the referenced row is gone — which is why
+// every relation below uses onDelete: SetNull instead of Cascade.
+// ─────────────────────────────────────────────────────────────────────────
+model Activity {
+  id   String       @id @default(cuid())
+  type ActivityType
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  actorId String
+  actor   User   @relation("ActivityActor", fields: [actorId], references: [id])
+
+  taskId    String?
+  task      Task?    @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  todoId    String?
+  todo      Todo?    @relation(fields: [todoId], references: [id], onDelete: SetNull)
+  commentId String?
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: SetNull)
+  fileId    String?
+  file      FileAsset? @relation(fields: [fileId], references: [id], onDelete: SetNull)
+
+  /// Free-form snapshot data — e.g. { "title": "Fix login bug" } for a
+  /// TASK_DELETED event, so the feed can still render a label afterward.
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([projectId, createdAt])
+  @@index([createdAt])
+  @@map("activities")
+}
+
