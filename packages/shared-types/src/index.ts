@@ -160,3 +160,10 @@ export interface ActivityDto {
   metadata: Record<string, unknown> | null;
   createdAt: string;
 }
+
+/** Dashboard's "Recent Activity" row — includes just enough joined context to render without extra lookups. */
+export interface RecentActivityDto extends ActivityDto {
+  projectName: string;
+  projectColor: string;
+  actorName: string;
+}

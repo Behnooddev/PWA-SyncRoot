@@ -6,6 +6,7 @@ import { resolveCurrentUser } from "@/middleware/currentUser.js";
 import { errorHandler, asyncHandler } from "@/middleware/errorHandler.js";
 import { logger } from "@/lib/logger.js";
 import { projectRouter } from "@/modules/projects/project.module.js";
+import { activityRouter } from "@/modules/activity/activity.module.js";
 
 /**
  * Builds and returns the Express app WITHOUT calling .listen(). server.ts
@@ -34,6 +35,7 @@ export function createApp(): Express {
   app.use("/api", asyncHandler(resolveCurrentUser));
 
   app.use("/api/projects", projectRouter);
+  app.use("/api/activity", activityRouter);
 
   // Must be registered after all routes.
   app.use(errorHandler);

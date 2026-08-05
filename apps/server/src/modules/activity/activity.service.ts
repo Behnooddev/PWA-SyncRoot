@@ -1,6 +1,7 @@
 import type {
   ActivityEntity,
   ActivityRepository,
+  ActivityWithContext,
   RecordActivityInput,
 } from "@/modules/activity/activity.repository.js";
 import { buildCursorPage } from "@/lib/pagination.js";
@@ -28,5 +29,10 @@ export class ActivityService {
   ): Promise<CursorPage<ActivityEntity>> {
     const rows = await this.activityRepository.listForProject(projectId, limit, cursor);
     return buildCursorPage(rows, limit);
+  }
+
+  /** Dashboard's cross-project "Recent Activity" — see repository comment. */
+  listRecent(limit: number): Promise<ActivityWithContext[]> {
+    return this.activityRepository.listRecent(limit);
   }
 }

@@ -33,6 +33,12 @@ export interface ActivityEntity {
   createdAt: Date;
 }
 
+/** What listRecent() actually returns — includes just enough joined context to render a feed row without N+1 lookups. */
+export interface ActivityWithContext extends ActivityEntity {
+  project: { name: string; color: string };
+  actor: { name: string };
+}
+
 export interface RecordActivityInput {
   type: ActivityType;
   projectId: string;
@@ -62,6 +68,25 @@ export class ActivityRepository {
       orderBy: { createdAt: "desc" },
       take: limit + 1,
       ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+    });
+  }
+
+  /**
+   * Cross-project feed for the Dashboard's "Recent Activity" (Phase 5).
+   * Deliberately simple — offset-free, just "last N" — since the
+   * Dashboard only ever shows a short recent list, not a paginated
+   * browse-everything view. The full per-project timeline with real
+   * pagination (listForProject above) is what Phase 11 builds the actual
+   * Activity Timeline UI on top of.
+   */
+  listRecent(limit: number): Promise<ActivityWithContext[]> {
+    return prisma.activity.findMany({
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      include: {
+        project: { select: { name: true, color: true } },
+        actor: { select: { name: true } },
+      },
     });
   }
 }
