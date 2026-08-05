@@ -97,9 +97,9 @@ covers *why it's built this way*.
 |---|---|---|
 | 0 | Planning & architecture | ✅ Done |
 | 1 | Project initialization & tooling | ✅ Done |
-| 2 | Database schema, migrations, seed | ⏳ Next |
-| 3 | Backend foundation (modules, middleware) | Not started |
-| 4 | Frontend foundation (layout, routing, theme) | Not started |
+| 2 | Database schema, migrations, seed | ✅ Done |
+| 3 | Backend foundation (modules, middleware, Project module) | ✅ Done |
+| 4 | Frontend foundation (layout, routing, theme) | ⏳ Next |
 | 5–13 | Dashboard, Projects, Tasks, Todos, Comments, Files, Activity, Search, Settings | Not started |
 | 14 | PWA (offline, install prompt, full icon set) | Not started |
 | 15 | Optimization, security review, deployment prep | Not started |
