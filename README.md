@@ -2,7 +2,7 @@
 
 **A Modern Collaborative Workspace** — projects, tasks, todos, comments, files, and activity tracking for small teams.
 
-> **Status:** Phases 0–7 complete (Dashboard + Project Workspace + Task Board). Todo/Comment/File/Activity feature logic lands in Phases 8–11 — see [Roadmap](#roadmap) below.
+> **Status:** Phases 0–8 complete (Dashboard + Project Workspace + Task Board + Todo List). Comment/File/Activity feature logic lands in Phases 9–11 — see [Roadmap](#roadmap) below.
 
 ---
 
@@ -88,24 +88,36 @@ covers _why it's built this way_.
   512×512 PNG (and maskable variant) icons are Phase 14 work, per the
   original roadmap.
 - The Project Workspace page (`/projects/:id`) has a real header/tab shell
-  (Phase 6) and a real Task Board (Phase 7). Todos/Comments/Files/Activity
-  tabs still show a labeled placeholder — Phases 8–11 replace each one with
-  real, data-backed content.
+  (Phase 6), a real Task Board (Phase 7), and a real Todo list (Phase 8).
+  Comments/Files/Activity tabs still show a labeled placeholder — Phases
+  9–11 replace each one with real, data-backed content.
 - Task Board's "move status" is a dropdown on each card, not drag-and-drop
-  — a deliberate scope call for Phase 7 (no drag-and-drop library is in
-  `package.json`, and this sandbox can't `npm install` a new one to try).
-  See `handoffs/PHASE_7_HANDOFF.md` for the reasoning; revisit if/when drag
-  interactions matter enough to justify the dependency.
+  — a deliberate scope call for Phase 7 (no drag-and-drop library was in
+  `package.json` at the time). Todo reordering (Phase 8) made the same
+  call for consistency, using up/down buttons instead. See
+  `handoffs/PHASE_7_HANDOFF.md` and `handoffs/PHASE_8_HANDOFF.md` for the
+  reasoning; revisit if/when drag interactions matter enough to justify
+  the dependency — the sandbox now has npm registry access (see below), so
+  adding one is actually possible starting from Phase 9.
 - Task Board fetches up to 100 tasks per project in one page (no real
   pagination yet) — fine at V1 scale, would need revisiting for a project
-  with a very large backlog.
+  with a very large backlog. Todos made the identical call (100/page).
+- Todos are project-level only in the UI. The backend (schema, repository,
+  service, API) already supports task-scoped todos end-to-end — `taskId`
+  on create/list — but no UI surfaces it yet. See
+  `handoffs/PHASE_8_HANDOFF.md`.
 - No auth, no real-time sync — both explicit V1 decisions, not gaps. See
   Architecture section above.
-- This sandbox has no network access, so nothing past `npm install` (build,
-  lint, test, `prisma generate`) has been run for real yet in this specific
-  environment/session — see `handoffs/PHASE_7_HANDOFF.md` §5 for what that
-  means for this phase's verification status, and `HOWTO.md` for how to
-  verify everything yourself once you have network access.
+- **Sandbox network access, updated as of Phase 8:** unlike Phases 1–7,
+  this session has real network access to the npm registry — `npm install`,
+  `npm run build`, `lint`, `test`, and `format:check` have now actually
+  been run (and two real bugs from Phase 7 were caught and fixed as a
+  result — see `handoffs/PHASE_8_HANDOFF.md` §1). `binaries.prisma.sh` is
+  still blocked, so `prisma generate`/`migrate dev` still can't run and no
+  live-database integration testing is possible — that part of the
+  original limitation is unchanged. If a future session has network access
+  too, don't skip re-running the root verification commands just because
+  this note says they've been run before — always verify fresh.
 
 ## Roadmap
 
@@ -119,7 +131,8 @@ covers _why it's built this way_.
 | 5     | Dashboard (project cards, search, stats, recent activity, CRUD)                       | ✅ Done     |
 | 6     | Project Workspace (header, tab shell — tab *content* deferred, see Known Gaps)        | ✅ Done     |
 | 7     | Task System (board, priority, due date, status)                                       | ✅ Done     |
-| 8–13  | Todo System, Comment System, File Manager, Activity System, Search, Settings          | ⏳ Next     |
+| 8     | Todo System (project-level checklist, completion tracking, reordering)               | ✅ Done     |
+| 9–13  | Comment System, File Manager, Activity System, Search, Settings                       | ⏳ Next     |
 | 14    | PWA (offline, install prompt, full icon set)                                          | Not started |
 | 15    | Optimization, security review, deployment prep                                        | Not started |
 

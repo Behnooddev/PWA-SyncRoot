@@ -34,10 +34,10 @@ export class TaskService {
 
     const task = await this.taskRepository.create({
       title: input.title,
-      description: input.description,
-      status: input.status,
-      priority: input.priority,
-      dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
+      ...(input.description !== undefined ? { description: input.description } : {}),
+      ...(input.status !== undefined ? { status: input.status } : {}),
+      ...(input.priority !== undefined ? { priority: input.priority } : {}),
+      ...(input.dueDate !== undefined ? { dueDate: new Date(input.dueDate) } : {}),
       projectId: input.projectId,
       createdById: actorId,
     });

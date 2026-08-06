@@ -245,6 +245,50 @@ for V1 scale, see README's Known Gaps).
 
 ---
 
+## Phase 8 — Todo System
+
+**What to verify:** the Todos tab is now real — project-level checklist
+items with completion tracking and reordering. This is the "barebones
+usable" milestone: a user can now create a project, add tasks, add
+todos, and see it all in the UI.
+
+```bash
+npm run dev
+```
+
+1. Open a project, go to the **Todos** tab.
+2. Type a title in the "Add a todo…" box and submit (Enter or the +
+   button) — it should appear at the bottom of the list immediately.
+3. Click the checkbox on a todo — it should show a checkmark, the title
+   should get a strikethrough, and the progress bar above the list
+   (visible once at least one todo exists) should update its "`N` of `M`
+   done" count and percentage.
+4. Click a todo's title (not the checkbox) — it becomes an editable text
+   field. Change the text and press Enter (or click away) — the new
+   title should save. Press Escape instead — it should revert without
+   saving.
+5. Hover a todo — up/down chevrons and a trash icon should fade in. Use
+   the chevrons to reorder a todo — the list order should update and
+   persist across a page reload. The chevron should be visually disabled
+   (and do nothing) at the top of the list for "up" and the bottom for
+   "down".
+6. Delete a todo (trash icon → confirm) — it should disappear from the
+   list.
+7. Go to the Dashboard's "Recent Activity" widget — you should see
+   entries for todos you created and for ones you checked/unchecked, but
+   **not** for a title-only rename or a reorder (see
+   `handoffs/PHASE_8_HANDOFF.md` for why — there's no ActivityType for
+   either of those, on purpose).
+8. Try adding a todo with an empty/whitespace-only title — the Add
+   button should stay disabled rather than submitting a blank item.
+
+**Known limitation for this phase specifically:** todos are project-level
+only in the UI — the backend already supports task-scoped todos
+end-to-end (`taskId` on create/list), but no UI surfaces it yet. See
+`handoffs/PHASE_8_HANDOFF.md`.
+
+---
+
 ## Quick reference: one command per phase
 
 | Phase | Fastest way to sanity-check it              |
@@ -256,6 +300,7 @@ for V1 scale, see README's Known Gaps).
 | 5     | `npm run dev`, use the Dashboard UI         |
 | 6     | `npm run dev`, open a project from the Dashboard |
 | 7     | `npm run test --workspace=apps/server` (task.service.test.ts), then `npm run dev` and use the Board tab |
+| 8     | `npm run test --workspace=apps/server` (todo.service.test.ts), then `npm run dev` and use the Todos tab |
 
 This file will keep growing as new phases land — each new phase should
 add its own section here before being marked done in `README.md`.

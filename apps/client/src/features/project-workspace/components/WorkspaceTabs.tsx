@@ -5,6 +5,10 @@ import { cn } from "@/lib/cn";
 export const WORKSPACE_TABS = ["board", "todos", "comments", "files", "activity"] as const;
 export type WorkspaceTab = (typeof WORKSPACE_TABS)[number];
 
+// Type guard is tightly coupled to WORKSPACE_TABS/WorkspaceTab above; splitting it into
+// its own file would be pure ceremony for one three-line function used only by this tab
+// strip and its page.
+// eslint-disable-next-line react-refresh/only-export-components
 export function isWorkspaceTab(value: string | null): value is WorkspaceTab {
   return WORKSPACE_TABS.includes(value as WorkspaceTab);
 }

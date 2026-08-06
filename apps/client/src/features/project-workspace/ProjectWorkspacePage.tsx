@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { isAxiosError } from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Activity, CheckSquare, MessageSquare, Paperclip } from "lucide-react";
+import { Activity, MessageSquare, Paperclip } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -19,6 +19,7 @@ import {
 } from "@/features/project-workspace/components/WorkspaceTabs";
 import { WorkspaceTabPlaceholder } from "@/features/project-workspace/components/WorkspaceTabPlaceholder";
 import { TaskBoard } from "@/features/tasks/components/TaskBoard";
+import { TodoList } from "@/features/todos/components/TodoList";
 
 const DEFAULT_TAB: WorkspaceTab = "board";
 
@@ -133,14 +134,7 @@ export function ProjectWorkspacePage() {
 
         <div className="mt-4">
           {activeTab === "board" && <TaskBoard projectId={id} />}
-          {activeTab === "todos" && (
-            <WorkspaceTabPlaceholder
-              icon={CheckSquare}
-              title="Todo list"
-              description="Quick checklist items, project-level or attached to a specific task, with reordering and completion tracking."
-              phase={8}
-            />
-          )}
+          {activeTab === "todos" && <TodoList projectId={id} />}
           {activeTab === "comments" && (
             <WorkspaceTabPlaceholder
               icon={MessageSquare}

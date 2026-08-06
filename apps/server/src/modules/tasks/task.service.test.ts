@@ -55,7 +55,10 @@ function makeFakes() {
   } satisfies Partial<Record<keyof ActivityService, unknown>>;
 
   const service = new TaskService(
-    taskRepository as unknown as TaskRepository,
+    // taskRepository's fake mocks every one of TaskRepository's five methods, so it's
+    // already structurally assignable — the other two fakes only cover the one/two
+    // methods TaskService actually calls, so they still need the escape-hatch cast.
+    taskRepository,
     projectRepository as unknown as ProjectRepository,
     activityService as unknown as ActivityService,
   );
@@ -99,6 +102,7 @@ describe("TaskService.create", () => {
     await service.create({ projectId: "proj_1", title: "Task", dueDate: "2026-08-10" }, "user_1");
 
     expect(taskRepository.create).toHaveBeenCalledWith(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- expect.any() is typed `any` by vitest, not a real type hole here.
       expect.objectContaining({ dueDate: expect.any(Date) }),
     );
   });
@@ -188,6 +192,7 @@ describe("TaskService.update", () => {
     await service.update("task_1", { title: "Renamed" }, "user_1");
     expect(taskRepository.update).toHaveBeenCalledWith(
       "task_1",
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- same vitest asymmetric-matcher `any` typing as above.
       expect.not.objectContaining({ dueDate: expect.anything() }),
     );
   });

@@ -8,6 +8,7 @@ import { logger } from "@/lib/logger.js";
 import { projectRouter } from "@/modules/projects/project.module.js";
 import { activityRouter } from "@/modules/activity/activity.module.js";
 import { taskRouter } from "@/modules/tasks/task.module.js";
+import { todoRouter } from "@/modules/todos/todo.module.js";
 
 /**
  * Builds and returns the Express app WITHOUT calling .listen(). server.ts
@@ -38,6 +39,7 @@ export function createApp(): Express {
   app.use("/api/projects", projectRouter);
   app.use("/api/activity", activityRouter);
   app.use("/api/tasks", taskRouter);
+  app.use("/api/todos", todoRouter);
 
   // Must be registered after all routes.
   app.use(errorHandler);
