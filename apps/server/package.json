@@ -22,7 +22,7 @@
     "@prisma/client": "^6.1.0",
     "@syncroot/shared-types": "*",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
+    "dotenv": "^17.4.2",
     "express": "^4.21.2",
     "pino": "^9.5.0",
     "pino-http": "^10.3.0",
