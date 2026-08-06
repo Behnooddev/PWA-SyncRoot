@@ -8,12 +8,12 @@
 
 ## Tech Stack
 
-| Layer | Choice |
-|---|---|
+| Layer    | Choice                                                                                              |
+| -------- | --------------------------------------------------------------------------------------------------- |
 | Frontend | React 19, TypeScript, Vite 6, Tailwind CSS v4, React Router 7, Framer Motion, TanStack Query, Axios |
-| Backend | Node.js, Express, TypeScript |
-| Database | PostgreSQL + Prisma ORM |
-| Tooling | npm workspaces monorepo, ESLint 9 (flat config), Prettier, Vitest |
+| Backend  | Node.js, Express, TypeScript                                                                        |
+| Database | PostgreSQL + Prisma ORM                                                                             |
+| Tooling  | npm workspaces monorepo, ESLint 9 (flat config), Prettier, Vitest                                   |
 
 ## Prerequisites
 
@@ -59,8 +59,8 @@ syncroot/
 
 See `PHASE_0_PLANNING.md` for the complete architecture write-up (why layered
 Controller/Service/Repository, why the StorageProvider abstraction, database
-relation strategy, etc.) — this README covers *how to run it*, that document
-covers *why it's built this way*.
+relation strategy, etc.) — this README covers _how to run it_, that document
+covers _why it's built this way_.
 
 ## Architecture at a Glance
 
@@ -93,25 +93,25 @@ covers *why it's built this way*.
 
 ## Roadmap
 
-| Phase | Scope | Status |
-|---|---|---|
-| 0 | Planning & architecture | ✅ Done |
-| 1 | Project initialization & tooling | ✅ Done |
-| 2 | Database schema, migrations, seed | ✅ Done |
-| 3 | Backend foundation (modules, middleware, Project module) | ✅ Done |
-| 4 | Frontend foundation (layout, routing, theme, reusable components) | ✅ Done |
-| 5 | Dashboard (project cards, search, stats, recent activity, CRUD) | ✅ Done |
-| 6–13 | Project Workspace, Tasks, Todos, Comments, Files, Activity Timeline, Search, Settings | ⏳ Next |
-| 14 | PWA (offline, install prompt, full icon set) | Not started |
-| 15 | Optimization, security review, deployment prep | Not started |
+| Phase | Scope                                                                                 | Status      |
+| ----- | ------------------------------------------------------------------------------------- | ----------- |
+| 0     | Planning & architecture                                                               | ✅ Done     |
+| 1     | Project initialization & tooling                                                      | ✅ Done     |
+| 2     | Database schema, migrations, seed                                                     | ✅ Done     |
+| 3     | Backend foundation (modules, middleware, Project module)                              | ✅ Done     |
+| 4     | Frontend foundation (layout, routing, theme, reusable components)                     | ✅ Done     |
+| 5     | Dashboard (project cards, search, stats, recent activity, CRUD)                       | ✅ Done     |
+| 6–13  | Project Workspace, Tasks, Todos, Comments, Files, Activity Timeline, Search, Settings | ⏳ Next     |
+| 14    | PWA (offline, install prompt, full icon set)                                          | Not started |
+| 15    | Optimization, security review, deployment prep                                        | Not started |
 
 ## Scripts (root)
 
-| Command | Does |
-|---|---|
-| `npm run dev` | Runs client + server concurrently |
-| `npm run build` | Builds shared-types → server → client, in order |
-| `npm run lint` | Lints every workspace |
-| `npm run format` | Formats the whole repo with Prettier |
-| `npm run test` | Runs tests in every workspace |
-| `npm run db:migrate` / `db:seed` / `db:studio` | Prisma commands, proxied to `apps/server` |
+| Command                                        | Does                                            |
+| ---------------------------------------------- | ----------------------------------------------- |
+| `npm run dev`                                  | Runs client + server concurrently               |
+| `npm run build`                                | Builds shared-types → server → client, in order |
+| `npm run lint`                                 | Lints every workspace                           |
+| `npm run format`                               | Formats the whole repo with Prettier            |
+| `npm run test`                                 | Runs tests in every workspace                   |
+| `npm run db:migrate` / `db:seed` / `db:studio` | Prisma commands, proxied to `apps/server`       |

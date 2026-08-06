@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    # env.ts requires DATABASE_URL to be a syntactically valid Postgres URL
+    # (see apps/server/src/config/env.ts) even for steps that never touch a
+    # real database — lint/typecheck/unit-tests all import lib/prisma.ts
+    # transitively, which imports config/env.ts. This dummy value satisfies
+    # Zod validation without needing a live Postgres instance in CI, since
+    # none of these steps actually issue a query.
+    env:
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+      NODE_ENV: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+  # Once integration tests exist (a later phase — see README roadmap),
+  # add a `services: postgres:` block here and point DATABASE_URL at it,
+  # then run `prisma migrate deploy` before the integration test step.
