@@ -1,7 +1,7 @@
 # Contributing
 
 The canonical, always-up-to-date contributing guide is
-[`CONTRIBUTING.md`](https://github.com/OWNER/syncroot/blob/main/CONTRIBUTING.md)
+[`CONTRIBUTING.md`](https://github.com/Behnooddev/syncroot/blob/main/CONTRIBUTING.md)
 in the main repo — this page is a shorter orientation that links out to
 it rather than duplicating it.
 
@@ -56,4 +56,4 @@ Use the issue templates under `.github/ISSUE_TEMPLATE/` in the main repo.
 ## Security issues
 
 Do **not** open a public issue for a security vulnerability — see
-[`SECURITY.md`](https://github.com/OWNER/syncroot/blob/main/SECURITY.md).
+[`SECURITY.md`](https://github.com/Behnooddev/syncroot/blob/main/SECURITY.md).

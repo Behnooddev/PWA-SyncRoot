@@ -30,16 +30,16 @@ this is the "barebones usable" milestone from the roadmap. Comments,
 file attachments, and a full activity timeline are next (Phases 9–11).
 
 See [Roadmap](Roadmap) for the full 15-phase breakdown and
-[CHANGELOG.md](https://github.com/OWNER/syncroot/blob/main/CHANGELOG.md)
+[CHANGELOG.md](https://github.com/Behnooddev/syncroot/blob/main/CHANGELOG.md)
 in the main repo for what shipped in each phase.
 
 ## Project links
 
-- [Main repository](https://github.com/OWNER/syncroot)
-- [README](https://github.com/OWNER/syncroot/blob/main/README.md) — setup & quick reference
-- [CHANGELOG](https://github.com/OWNER/syncroot/blob/main/CHANGELOG.md) — what shipped per phase
-- [Handoffs](https://github.com/OWNER/syncroot/tree/main/handoffs) — detailed per-phase engineering notes (the *why* behind every non-obvious decision)
-- [Issues](https://github.com/OWNER/syncroot/issues) · [Security Policy](https://github.com/OWNER/syncroot/blob/main/SECURITY.md)
+- [Main repository](https://github.com/Behnooddev/syncroot)
+- [README](https://github.com/Behnooddev/syncroot/blob/main/README.md) — setup & quick reference
+- [CHANGELOG](https://github.com/Behnooddev/syncroot/blob/main/CHANGELOG.md) — what shipped per phase
+- [Handoffs](https://github.com/Behnooddev/syncroot/tree/main/handoffs) — detailed per-phase engineering notes (the *why* behind every non-obvious decision)
+- [Issues](https://github.com/Behnooddev/syncroot/issues) · [Security Policy](https://github.com/Behnooddev/syncroot/blob/main/SECURITY.md)
 
 > Replace `OWNER` in the links above with the actual GitHub username/org
 > once this repo is pushed — see [wiki/README.md](../README.md) in this

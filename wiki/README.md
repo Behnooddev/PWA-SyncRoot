@@ -17,7 +17,7 @@ and get reviewed the same way everything else does.
 
    ```bash
    cd wiki
-   grep -rl "OWNER/syncroot" . | xargs sed -i '' 's#OWNER/syncroot#your-github-username/syncroot#g'
+   grep -rl "Behnooddev/syncroot" . | xargs sed -i '' 's#Behnooddev/syncroot#your-github-username/syncroot#g'
    # (drop the '' after -i on Linux/GNU sed; macOS/BSD sed needs it)
    ```
 
