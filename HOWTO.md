@@ -193,11 +193,55 @@ npm run dev
    should now list your actual projects (up to 8, most recent first) as
    clickable links, with the current project highlighted when you're on
    its workspace page. (This was a leftover bug from Phase 4/5 — see
-   `PHASE_6_HANDOFF.md`.)
+   `handoffs/PHASE_6_HANDOFF.md`.)
 
 **Known limitation for this phase specifically:** steps 1–7 above test the
 shell, not real task/todo/comment/file/activity data — there isn't any yet.
 That's Phases 7–11.
+
+---
+
+## Phase 7 — Task System
+
+**What to verify:** the Board tab is now real — full task CRUD, status
+moves, priority, due dates, and a completion progress bar.
+
+```bash
+npm run dev
+```
+
+1. Open a project, land on the **Board** tab (default) — you should see 4
+   columns: To Do, In Progress, In Review, Done, each with a count and a
+   "+" button.
+2. Click "+" on any column — a "New task" modal opens with that column's
+   status pre-selected. Fill in a title (required), optionally a
+   description, priority, and due date. Save — the card should appear in
+   the column you clicked "+" on, not always in "To Do".
+3. Hover a task card — pencil and trash icons should fade in. Click the
+   pencil — the same modal opens, prefilled, with "Save changes" instead
+   of "Create task".
+4. On a card, change the status dropdown at the bottom — the card should
+   move to the new column immediately (no drag-and-drop in this phase —
+   see `handoffs/PHASE_7_HANDOFF.md` for why).
+5. Set a due date in the past on a task that isn't Done — the due date
+   text on the card should render in red as "Overdue: …". Mark that task
+   Done — the red overdue styling should go away even though the date is
+   still in the past.
+6. Once at least one task exists, a progress bar should appear above the
+   columns showing "`N` of `M` tasks done" and a percentage — mark tasks
+   Done/un-Done and confirm the bar updates.
+7. Delete a task (trash icon → confirm) — it should disappear from the
+   board. Go to the Dashboard — the "Recent Activity" widget should show
+   the task creation/update/delete events you just made (Phase 7 tasks
+   feed Phase 5's activity feed, since `ActivityService.record()` is
+   shared infrastructure, not new).
+8. Try creating a task with an empty title — should show an inline "Task
+   title is required." error and NOT submit, rather than crashing or
+   silently doing nothing.
+
+**Known limitation for this phase specifically:** up to 100 tasks per
+project are fetched in one page — no pagination/virtualization yet (fine
+for V1 scale, see README's Known Gaps).
 
 ---
 
@@ -211,6 +255,7 @@ That's Phases 7–11.
 | 4     | `npm run dev:client`, open in incognito     |
 | 5     | `npm run dev`, use the Dashboard UI         |
 | 6     | `npm run dev`, open a project from the Dashboard |
+| 7     | `npm run test --workspace=apps/server` (task.service.test.ts), then `npm run dev` and use the Board tab |
 
 This file will keep growing as new phases land — each new phase should
 add its own section here before being marked done in `README.md`.

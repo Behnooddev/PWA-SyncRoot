@@ -5,6 +5,27 @@ build phase (see `README.md` for the full roadmap).
 
 ## [Unreleased]
 
+### Phase 7 — Task System
+
+- Backend `tasks` module (schema/repository/service/controller/routes),
+  file-for-file mirroring `modules/projects/` — `POST/GET/PATCH/DELETE
+  /api/tasks`, flat (not nested under `/api/projects/:id/tasks` — see
+  `handoffs/PHASE_7_HANDOFF.md` for why), plus 12 unit tests
+  (`task.service.test.ts`, mocked repositories — same style as
+  `project.service.test.ts`)
+- `TaskBoard`: 4-column board (To Do/In Progress/In Review/Done), replaces
+  the Phase 6 "Board" placeholder tab. Create (per-column "+"), edit,
+  delete, and a completion progress bar
+- **Move status is a `<select>` dropdown on each card, not drag-and-drop**
+  — deliberate scope call, no drag-and-drop library exists in
+  `package.json` and this sandbox can't install one to try. Documented as
+  a Known Gap; revisit later if it matters enough to add the dependency.
+- New shared `Select` UI primitive (`components/ui/Select.tsx`) — first
+  dropdown field needed anywhere in the app so far
+- `lib/format.ts`: added `toDateInputValue()` / `fromDateInputValue()` for
+  converting between the API's ISO date strings and a native
+  `<input type="date">`'s `"YYYY-MM-DD"` value
+
 ### Phase 6 — Project Workspace
 
 - `ProjectWorkspacePage` page shell: real project header (name, description,
@@ -12,7 +33,7 @@ build phase (see `README.md` for the full roadmap).
   tab state persisted in the URL (`?tab=`)
 - Each tab renders a shared `WorkspaceTabPlaceholder` naming which phase
   (7–11) builds its real content — no per-tab logic yet, by design (see
-  `PHASE_6_HANDOFF.md` for the scoping rationale)
+  `handoffs/PHASE_6_HANDOFF.md` for the scoping rationale)
 - New `GET /api/projects/:id` client wiring: `getProject()` + `useProject()`
 - **Bug fixed:** `Sidebar`'s project list was still a static "Phase 5 wires
   this up" placeholder even though Phase 5 (Dashboard) had already shipped —

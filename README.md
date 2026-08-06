@@ -2,7 +2,7 @@
 
 **A Modern Collaborative Workspace** — projects, tasks, todos, comments, files, and activity tracking for small teams.
 
-> **Status:** Phases 0–6 complete (Dashboard + Project Workspace shell). Task/Todo/Comment/File/Activity feature logic lands in Phases 7–11 — see [Roadmap](#roadmap) below.
+> **Status:** Phases 0–7 complete (Dashboard + Project Workspace + Task Board). Todo/Comment/File/Activity feature logic lands in Phases 8–11 — see [Roadmap](#roadmap) below.
 
 ---
 
@@ -53,6 +53,7 @@ syncroot/
 │   └── server/     # Express API
 ├── packages/
 │   └── shared-types/  # Types shared between client & server
+├── handoffs/       # One file per phase — read the highest-numbered one first
 ├── docker-compose.yml # Local Postgres
 └── PHASE_0_PLANNING.md # Full architecture record
 ```
@@ -86,17 +87,25 @@ covers _why it's built this way_.
 - PWA manifest currently ships one SVG icon. Browser-standard 192×192 /
   512×512 PNG (and maskable variant) icons are Phase 14 work, per the
   original roadmap.
-- The Project Workspace page (`/projects/:id`) is a real header + tab shell
-  as of Phase 6, but every tab (Board/Todos/Comments/Files/Activity) shows a
-  labeled placeholder — Phases 7–11 replace each one with real, data-backed
-  content. See `PHASE_6_HANDOFF.md` for the full scoping rationale.
+- The Project Workspace page (`/projects/:id`) has a real header/tab shell
+  (Phase 6) and a real Task Board (Phase 7). Todos/Comments/Files/Activity
+  tabs still show a labeled placeholder — Phases 8–11 replace each one with
+  real, data-backed content.
+- Task Board's "move status" is a dropdown on each card, not drag-and-drop
+  — a deliberate scope call for Phase 7 (no drag-and-drop library is in
+  `package.json`, and this sandbox can't `npm install` a new one to try).
+  See `handoffs/PHASE_7_HANDOFF.md` for the reasoning; revisit if/when drag
+  interactions matter enough to justify the dependency.
+- Task Board fetches up to 100 tasks per project in one page (no real
+  pagination yet) — fine at V1 scale, would need revisiting for a project
+  with a very large backlog.
 - No auth, no real-time sync — both explicit V1 decisions, not gaps. See
   Architecture section above.
 - This sandbox has no network access, so nothing past `npm install` (build,
   lint, test, `prisma generate`) has been run for real yet in this specific
-  environment/session — see `PHASE_6_HANDOFF.md` §5 for what that means for
-  this phase's verification status, and `HOWTO.md` for how to verify
-  everything yourself once you have network access.
+  environment/session — see `handoffs/PHASE_7_HANDOFF.md` §5 for what that
+  means for this phase's verification status, and `HOWTO.md` for how to
+  verify everything yourself once you have network access.
 
 ## Roadmap
 
@@ -109,7 +118,8 @@ covers _why it's built this way_.
 | 4     | Frontend foundation (layout, routing, theme, reusable components)                     | ✅ Done     |
 | 5     | Dashboard (project cards, search, stats, recent activity, CRUD)                       | ✅ Done     |
 | 6     | Project Workspace (header, tab shell — tab *content* deferred, see Known Gaps)        | ✅ Done     |
-| 7–13  | Task System, Todo System, Comment System, File Manager, Activity System, Search, Settings | ⏳ Next |
+| 7     | Task System (board, priority, due date, status)                                       | ✅ Done     |
+| 8–13  | Todo System, Comment System, File Manager, Activity System, Search, Settings          | ⏳ Next     |
 | 14    | PWA (offline, install prompt, full icon set)                                          | Not started |
 | 15    | Optimization, security review, deployment prep                                        | Not started |
 

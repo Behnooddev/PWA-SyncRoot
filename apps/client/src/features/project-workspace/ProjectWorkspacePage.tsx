@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { isAxiosError } from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Activity, CheckSquare, KanbanSquare, MessageSquare, Paperclip } from "lucide-react";
+import { Activity, CheckSquare, MessageSquare, Paperclip } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -18,6 +18,7 @@ import {
   type WorkspaceTab,
 } from "@/features/project-workspace/components/WorkspaceTabs";
 import { WorkspaceTabPlaceholder } from "@/features/project-workspace/components/WorkspaceTabPlaceholder";
+import { TaskBoard } from "@/features/tasks/components/TaskBoard";
 
 const DEFAULT_TAB: WorkspaceTab = "board";
 
@@ -131,14 +132,7 @@ export function ProjectWorkspacePage() {
         <WorkspaceTabs active={activeTab} onChange={setActiveTab} />
 
         <div className="mt-4">
-          {activeTab === "board" && (
-            <WorkspaceTabPlaceholder
-              icon={KanbanSquare}
-              title="Task board"
-              description="Create, edit, and drag tasks between Todo / In Progress / In Review / Done, with priority and due dates."
-              phase={7}
-            />
-          )}
+          {activeTab === "board" && <TaskBoard projectId={id} />}
           {activeTab === "todos" && (
             <WorkspaceTabPlaceholder
               icon={CheckSquare}

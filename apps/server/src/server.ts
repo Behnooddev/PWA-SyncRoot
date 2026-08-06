@@ -5,8 +5,10 @@ import { prisma } from "@/lib/prisma.js";
 
 const app = createApp();
 
-const server = app.listen(env.PORT, () => {
-  logger.info(`🚀 SyncRoot server listening on http://localhost:${env.PORT} [${env.NODE_ENV}]`);
+const server = app.listen(env.PORT, "0.0.0.0", () => {
+  logger.info(
+    `🚀 SyncRoot server listening on port ${env.PORT} [${env.NODE_ENV}]`
+  );
 });
 
 function shutdown(signal: string): void {
