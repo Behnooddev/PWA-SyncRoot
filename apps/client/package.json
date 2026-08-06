@@ -15,7 +15,7 @@
     "@syncroot/shared-types": "*",
     "@tanstack/react-query": "^5.62.7",
     "axios": "^1.7.9",
-    "framer-motion": "^11.15.0",
+    "framer-motion": "^12.43.0",
     "lucide-react": "^0.469.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
