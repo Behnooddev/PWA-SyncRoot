@@ -20,6 +20,11 @@ export async function listProjects(params: ListProjectsParams): Promise<OffsetPa
   return res.data.data;
 }
 
+export async function getProject(id: string): Promise<ProjectDto> {
+  const res = await api.get<ApiSuccess<ProjectDto>>(`/projects/${id}`);
+  return res.data.data;
+}
+
 export async function createProject(payload: CreateProjectPayload): Promise<ProjectDto> {
   const res = await api.post<ApiSuccess<ProjectDto>>("/projects", payload);
   return res.data.data;

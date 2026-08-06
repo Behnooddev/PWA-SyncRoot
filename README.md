@@ -2,7 +2,7 @@
 
 **A Modern Collaborative Workspace** — projects, tasks, todos, comments, files, and activity tracking for small teams.
 
-> **Status:** Phase 1 (Project Initialization) complete. No business logic yet — see [Roadmap](#roadmap) below.
+> **Status:** Phases 0–6 complete (Dashboard + Project Workspace shell). Task/Todo/Comment/File/Activity feature logic lands in Phases 7–11 — see [Roadmap](#roadmap) below.
 
 ---
 
@@ -86,10 +86,17 @@ covers _why it's built this way_.
 - PWA manifest currently ships one SVG icon. Browser-standard 192×192 /
   512×512 PNG (and maskable variant) icons are Phase 14 work, per the
   original roadmap.
-- Prisma schema currently defines only the datasource/generator — no
-  models yet. That's Phase 2.
-- No routes beyond `/api/health` exist yet — Phase 3 builds the module
-  structure (controller/service/repository) that later feature phases fill in.
+- The Project Workspace page (`/projects/:id`) is a real header + tab shell
+  as of Phase 6, but every tab (Board/Todos/Comments/Files/Activity) shows a
+  labeled placeholder — Phases 7–11 replace each one with real, data-backed
+  content. See `PHASE_6_HANDOFF.md` for the full scoping rationale.
+- No auth, no real-time sync — both explicit V1 decisions, not gaps. See
+  Architecture section above.
+- This sandbox has no network access, so nothing past `npm install` (build,
+  lint, test, `prisma generate`) has been run for real yet in this specific
+  environment/session — see `PHASE_6_HANDOFF.md` §5 for what that means for
+  this phase's verification status, and `HOWTO.md` for how to verify
+  everything yourself once you have network access.
 
 ## Roadmap
 
@@ -101,7 +108,8 @@ covers _why it's built this way_.
 | 3     | Backend foundation (modules, middleware, Project module)                              | ✅ Done     |
 | 4     | Frontend foundation (layout, routing, theme, reusable components)                     | ✅ Done     |
 | 5     | Dashboard (project cards, search, stats, recent activity, CRUD)                       | ✅ Done     |
-| 6–13  | Project Workspace, Tasks, Todos, Comments, Files, Activity Timeline, Search, Settings | ⏳ Next     |
+| 6     | Project Workspace (header, tab shell — tab *content* deferred, see Known Gaps)        | ✅ Done     |
+| 7–13  | Task System, Todo System, Comment System, File Manager, Activity System, Search, Settings | ⏳ Next |
 | 14    | PWA (offline, install prompt, full icon set)                                          | Not started |
 | 15    | Optimization, security review, deployment prep                                        | Not started |
 

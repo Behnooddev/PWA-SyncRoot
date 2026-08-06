@@ -5,10 +5,10 @@ import { ProjectWorkspacePage } from "@/features/project-workspace/ProjectWorksp
 import { SettingsPage } from "@/features/settings/SettingsPage";
 
 /**
- * Real route tree (Phase 4). Dashboard and Project Workspace are
- * intentionally stub content until Phases 5 and 6 build them out — the
- * point of this phase is the layout/routing/navigation shell working
- * correctly, not the feature content inside it.
+ * Real route tree (shell built in Phase 4). Dashboard (Phase 5) and
+ * Project Workspace (Phase 6) are both real now; Phases 7-11 fill in the
+ * Workspace's tab content (see WorkspaceTabPlaceholder usages in
+ * ProjectWorkspacePage.tsx for exactly which phase builds which tab).
  *
  * `handle.title` on each route feeds AppLayout's Navbar title — see
  * layouts/AppLayout.tsx.

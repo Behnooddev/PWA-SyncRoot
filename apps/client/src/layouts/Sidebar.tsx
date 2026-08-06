@@ -1,6 +1,7 @@
 import { LayoutGrid, Settings, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/cn";
+import { useProjects } from "@/features/projects/hooks/useProjects";
 
 interface SidebarProps {
   /** Controls the mobile off-canvas state. Ignored above the md breakpoint, where the sidebar is always visible. */
@@ -10,7 +11,13 @@ interface SidebarProps {
 
 const navItems = [{ to: "/", icon: LayoutGrid, label: "Dashboard", end: true }];
 
+/** Enough for a useful quick-jump list — the full set lives on the Dashboard grid. */
+const SIDEBAR_PROJECT_LIMIT = 8;
+
 export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
+  const projectsQuery = useProjects({ limit: SIDEBAR_PROJECT_LIMIT });
+  const projects = projectsQuery.data?.items ?? [];
+
   return (
     <>
       {/* Mobile backdrop */}
@@ -68,9 +75,50 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
           <p className="text-text-tertiary px-3 text-xs font-medium tracking-wide uppercase">
             Projects
           </p>
-          <p className="text-text-tertiary mt-2 px-3 text-xs">
-            No projects yet — Phase 5 wires this up.
-          </p>
+
+          {projectsQuery.isLoading && (
+            <div className="mt-2 flex flex-col gap-1.5 px-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-bg-elevated h-6 animate-pulse rounded-md" />
+              ))}
+            </div>
+          )}
+
+          {projectsQuery.isError && (
+            <p className="text-text-tertiary mt-2 px-3 text-xs">Couldn't load projects.</p>
+          )}
+
+          {projectsQuery.isSuccess && projects.length === 0 && (
+            <p className="text-text-tertiary mt-2 px-3 text-xs">
+              No projects yet — create one from the Dashboard.
+            </p>
+          )}
+
+          {projects.length > 0 && (
+            <nav className="mt-1 flex flex-col gap-0.5">
+              {projects.map((project) => (
+                <NavLink
+                  key={project.id}
+                  to={`/projects/${project.id}`}
+                  onClick={onMobileClose}
+                  className={({ isActive }) =>
+                    cn(
+                      "flex items-center gap-2.5 rounded-[var(--radius-control)] px-3 py-1.5 text-sm transition-colors",
+                      isActive
+                        ? "bg-accent-muted text-text-primary"
+                        : "text-text-secondary hover:text-text-primary hover:bg-white/5",
+                    )
+                  }
+                >
+                  <span
+                    className="h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: project.color }}
+                  />
+                  <span className="truncate">{project.name}</span>
+                </NavLink>
+              ))}
+            </nav>
+          )}
         </div>
 
         <NavLink

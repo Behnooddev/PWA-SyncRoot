@@ -158,6 +158,49 @@ With both `npm run dev:server` and `npm run dev:client` running (or just `npm ru
 
 ---
 
+## Phase 6 — Project Workspace
+
+**What to verify:** the page shell — header, tabs, and per-tab placeholders
+— for a single project.
+
+```bash
+npm run dev
+```
+
+1. From the Dashboard, click a project card (not its pencil/trash icons) —
+   you should land on `/projects/<id>` with a "← Dashboard" breadcrumb, the
+   project's name/description/color bar, and a 5-tab strip: Board, Todos,
+   Comments, Files, Activity.
+2. Each tab should show a distinct placeholder card naming which phase
+   builds its real content (Board → "Coming in Phase 7", Todos → Phase 8,
+   Comments → Phase 9, Files → Phase 10, Activity → Phase 11).
+3. Click through the tabs — the URL should update to `?tab=todos` etc.
+   (except Board, which is the default and has no query param). Reload the
+   page on a non-default tab — it should stay on that tab, not reset to
+   Board.
+4. Click the pencil icon in the header — the same edit modal from the
+   Dashboard opens, prefilled. Change the name, save — the header updates
+   in place, and if you go back to the Dashboard, the card reflects the
+   change too.
+5. Click the trash icon, confirm — you should be redirected to the
+   Dashboard and the project should be gone from the grid (soft-deleted,
+   same as Phase 5's delete).
+6. Visit a URL for a project id that doesn't exist (or delete a project,
+   then try to reload its old `/projects/<id>` URL) — you should see a
+   "This project doesn't exist or was deleted" message with a button back
+   to the Dashboard, not a crash or a blank page.
+7. Check the **Sidebar** (left side, or the hamburger menu on mobile) — it
+   should now list your actual projects (up to 8, most recent first) as
+   clickable links, with the current project highlighted when you're on
+   its workspace page. (This was a leftover bug from Phase 4/5 — see
+   `PHASE_6_HANDOFF.md`.)
+
+**Known limitation for this phase specifically:** steps 1–7 above test the
+shell, not real task/todo/comment/file/activity data — there isn't any yet.
+That's Phases 7–11.
+
+---
+
 ## Quick reference: one command per phase
 
 | Phase | Fastest way to sanity-check it              |
@@ -167,6 +210,7 @@ With both `npm run dev:server` and `npm run dev:client` running (or just `npm ru
 | 3     | `npm run test --workspace=apps/server`      |
 | 4     | `npm run dev:client`, open in incognito     |
 | 5     | `npm run dev`, use the Dashboard UI         |
+| 6     | `npm run dev`, open a project from the Dashboard |
 
 This file will keep growing as new phases land — each new phase should
 add its own section here before being marked done in `README.md`.

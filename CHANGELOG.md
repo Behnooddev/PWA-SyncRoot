@@ -5,6 +5,23 @@ build phase (see `README.md` for the full roadmap).
 
 ## [Unreleased]
 
+### Phase 6 — Project Workspace
+
+- `ProjectWorkspacePage` page shell: real project header (name, description,
+  color, edit/delete) + a 5-tab strip (Board/Todos/Comments/Files/Activity),
+  tab state persisted in the URL (`?tab=`)
+- Each tab renders a shared `WorkspaceTabPlaceholder` naming which phase
+  (7–11) builds its real content — no per-tab logic yet, by design (see
+  `PHASE_6_HANDOFF.md` for the scoping rationale)
+- New `GET /api/projects/:id` client wiring: `getProject()` + `useProject()`
+- **Bug fixed:** `Sidebar`'s project list was still a static "Phase 5 wires
+  this up" placeholder even though Phase 5 (Dashboard) had already shipped —
+  it never actually got wired. Now shows the 8 most recent projects with
+  active-route highlighting.
+- **Doc fix:** `packages/shared-types/src/index.ts`'s header comment still
+  said domain DTOs were "not defined here yet" — stale since Phase 2 actually
+  defined them in the same file. Comment corrected, no type changes.
+
 ### Phase 5 — Dashboard
 
 - Project cards, create/edit/delete modals, debounced search

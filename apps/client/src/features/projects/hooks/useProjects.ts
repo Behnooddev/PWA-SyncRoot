@@ -1,7 +1,9 @@
+import { isAxiosError } from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createProject,
   deleteProject,
+  getProject,
   listProjects,
   updateProject,
   type CreateProjectPayload,
@@ -10,6 +12,7 @@ import {
 } from "@/features/projects/api";
 
 const projectsKey = (params: ListProjectsParams) => ["projects", params] as const;
+const projectKey = (id: string) => ["projects", "detail", id] as const;
 
 export function useProjects(params: ListProjectsParams) {
   return useQuery({
@@ -20,6 +23,25 @@ export function useProjects(params: ListProjectsParams) {
     // refresh. 15s is frequent enough to feel "synced" without hammering
     // the API for a list that changes rarely.
     refetchInterval: 15_000,
+  });
+}
+
+/**
+ * Single-project fetch for the Project Workspace page (Phase 6). A 404
+ * (deleted, or a stale/bad link) is a terminal, expected outcome — not a
+ * transient failure — so it's excluded from retry. Anything else (network
+ * blip, 500) still gets React Query's default retry behavior.
+ */
+export function useProject(id: string | undefined) {
+  return useQuery({
+    queryKey: projectKey(id ?? ""),
+    queryFn: () => getProject(id as string),
+    enabled: Boolean(id),
+    refetchInterval: 15_000,
+    retry: (failureCount, error) => {
+      if (isAxiosError(error) && error.response?.status === 404) return false;
+      return failureCount < 3;
+    },
   });
 }
 

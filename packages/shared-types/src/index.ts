@@ -3,14 +3,12 @@
  *
  * Cross-cutting types shared between apps/client and apps/server.
  *
- * IMPORTANT: Domain entity types (Project, Task, Todo, Comment, FileAsset,
- * Activity) are intentionally NOT defined here yet. They will be derived
- * from the Prisma schema in Phase 2 and re-exported from this package, so
- * there is exactly one source of truth for entity shapes instead of two
- * hand-maintained copies drifting apart over time.
- *
- * What lives here for now: the generic envelope types every API response
- * uses, regardless of which entity it carries.
+ * Domain entity DTOs (Project, Task, Todo, Comment, FileAsset, Activity)
+ * are hand-written below to structurally mirror the Prisma schema — see
+ * the "Domain entity DTOs" section further down for why they're
+ * hand-written rather than generated. This file also carries the generic
+ * envelope types every API response uses, regardless of which entity it
+ * carries.
  */
 
 /** Standard shape for every successful API response. */
