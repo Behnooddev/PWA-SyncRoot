@@ -32,14 +32,14 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "@eslint/js": "^9.17.0",
-    "@types/node": "^22.10.2",
-    "eslint": "^9.17.0",
-    "prisma": "^6.1.0",
-    "tsc-alias": "^1.8.10",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.1",
-    "vitest": "^2.1.8"
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.2",
+    "eslint": "^10.11.0",
+    "prisma": "^7.10.0",
+    "tsc-alias": "^1.9.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^5.0.1"
   }
 }
